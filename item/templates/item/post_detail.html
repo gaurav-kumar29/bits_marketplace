@@ -1,0 +1,46 @@
+{% extends "item/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <article class="media content-section">
+        <img class="rounded-square article-img" src="{{ object.item_image.url }}">
+        <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' object.seller.username %}">{{ object.seller}}</a>
+            <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+            {% if object.seller == user %}
+                <div>
+                    <a class = "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+                    <a class = "btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+                </div>
+            {% else %}
+                <div>
+                    <a class = "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-bid' object.id %}">Bid</a>
+                </div>
+            {% endif %}
+        </div>
+        <h2 class="article-title">{{ object.title }}</h2>
+        <p class="article-content">{{ object.desc }}</p>
+        <span class="card-price">₹{{ object.base_price }}</span>
+        {% if object.bid != 0 %}
+            <p class="article-content">Highest Bid: {{ object.bid }}</p>
+            {% if object.seller == user and object.bid_phone != 'XXXXXXXXXX' %}
+                <p class="article-content">Phone Number of Highest Bidder: {{ object.bid_phone }}</p>
+            {% elif object.seller == user and object.bid_phone == 'XXXXXXXXXX' %}
+                <p class="article-content">No Phone Number Provided</p>
+            {% endif %}
+
+        {% else %}
+        <p class="article-content">No current bids</p>
+        {% endif %}
+
+        <small class="text-muted">{{ object.status }}</small>
+        {% if object.seller == user %}
+        {% if object.status == 'Unsold' %}
+                <div>
+                    <a class = "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-bid-accept' object.id %}">Accept Bid</a>
+                </div>
+        {% endif %}
+        {% endif %}
+        </div>
+    </article>
+{% endblock content %}
