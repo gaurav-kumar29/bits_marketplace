@@ -36,9 +36,11 @@
         <small class="text-muted">{{ object.status }}</small>
         {% if object.seller == user %}
         {% if object.status == 'Unsold' %}
+        {% if object.bid != 0 %}
                 <div>
                     <a class = "btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-bid-accept' object.id %}">Accept Bid</a>
                 </div>
+        {% endif %}
         {% endif %}
         {% endif %}
         </div>
