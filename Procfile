@@ -1,0 +1,1 @@
+web: gunicorn bits_marketplace.wsgi
